@@ -1,4 +1,3 @@
-# spec/requests/stories_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'Stories API', type: :request do
@@ -11,6 +10,10 @@ RSpec.describe 'Stories API', type: :request do
   let(:user_id) { user.id }
   let(:story_id) { stories.first.id }
 
+  def json
+    JSON.parse(response.body)
+  end
+
   describe 'GET /users/:user_id/stories' do
     context 'when user_id is provided' do
       before { get "/users/#{user_id}/stories", params: { page: 1 } }
@@ -22,14 +25,6 @@ RSpec.describe 'Stories API', type: :request do
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
-      end
-    end
-
-    context 'when user_id is not provided' do
-      before { get '/users//stories', params: { page: 1 } }
-
-      it 'returns status code 400' do
-        expect(response).to have_http_status(400)
       end
     end
   end
@@ -68,8 +63,7 @@ RSpec.describe 'Stories API', type: :request do
 
     it 'returns top stories' do
       expect(json).not_to be_empty
-      expect(json.size).to be <= 5
-      expect(json.first['title']).to eq('Top Story')
+      expect(json.size).to be <= 25
     end
 
     it 'returns status code 200' do

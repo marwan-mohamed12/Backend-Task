@@ -1,7 +1,7 @@
 class ReviewsController < ApplicationController
 
   def create
-    review = Review.new(review_params)
+    review = Review.new(review_params.merge(params.permit(:story_id)))
     if review.save
       render json: review, status: :created
     else
@@ -12,7 +12,7 @@ class ReviewsController < ApplicationController
   private
 
   def review_params
-    params.require(:review).permit(:comment, :rating, :story_id, :user_id)
+    params.require(:review).permit(:comment, :rating, :user_id)
   end
 
 end

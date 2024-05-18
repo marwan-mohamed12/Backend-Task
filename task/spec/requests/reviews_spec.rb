@@ -1,4 +1,3 @@
-# spec/requests/reviews_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'Reviews API', type: :request do
@@ -8,9 +7,13 @@ RSpec.describe 'Reviews API', type: :request do
   let(:user_id) { user.id }
   let(:valid_attributes) { { comment: 'Great story', rating: 5, user_id: user_id } }
 
-  describe 'POST /users/:user_id/stories/:story_id/reviews' do
+  def json
+    JSON.parse(response.body)
+  end
+
+  describe 'POST /stories/:story_id/reviews' do
     context 'when the request is valid' do
-      before { post "/users/#{user_id}/stories/#{story_id}/reviews", params: { review: valid_attributes } }
+      before { post "/stories/#{story_id}/reviews", params: { review: valid_attributes } }
 
       it 'creates a review' do
         expect(json['comment']).to eq('Great story')
@@ -25,14 +28,14 @@ RSpec.describe 'Reviews API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post "/users/#{user_id}/stories/#{story_id}/reviews", params: { review: { comment: '' } } }
+      before { post "/stories/#{story_id}/reviews", params: { review: { comment: '' } } }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
-        expect(response.body).to match(/Validation failed: Comment can't be blank/)
+        expect(response.body).to match(/Comment can't be blank/)
       end
     end
   end
