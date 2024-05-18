@@ -28,6 +28,10 @@ This document outlines the API endpoints for the User Story App
    rails server
    ```
 
+### ERD
+
+![ERD](https://github.com/marwan-mohamed12/Backend-Task/assets/40841193/3bed19a1-3545-4b34-a3c5-743060c8833e)
+
 ### Endpoints
 
 **1. Create a Story:**
@@ -87,9 +91,9 @@ This document outlines the API endpoints for the User Story App
   * On failure: Returns an error message with status code 400.
 
 
+**Error Handling:**
 
+The API returns standard HTTP status codes for errors. For example, a 404 status code indicates that the resource was not found.
 
-
-![ERD](https://github.com/marwan-mohamed12/Backend-Task/assets/40841193/3bed19a1-3545-4b34-a3c5-743060c8833e)
 
 
