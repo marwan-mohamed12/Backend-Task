@@ -9,6 +9,7 @@ RSpec.describe 'Stories API', type: :request do
   let!(:reviews) { create_list(:review, 10, story: top_story, user: user, rating: 5) }
   let(:user_id) { user.id }
   let(:story_id) { stories.first.id }
+  let(:valid_attributes) { { title: 'Learn Elm', body: 'Lorem ipsum' } }
 
   def json
     JSON.parse(response.body)
@@ -19,7 +20,7 @@ RSpec.describe 'Stories API', type: :request do
       before { get "/users/#{user_id}/stories", params: { page: 1 } }
 
       it 'returns user stories' do
-        expect(json.size).to eq(5) # because of per(5)
+        expect(json.size).to eq(5) # because of per(5) in the controller
         expect(json.first['user_id']).to eq(user.id)
       end
 
@@ -29,11 +30,9 @@ RSpec.describe 'Stories API', type: :request do
     end
   end
 
-  describe 'POST /users/:user_id/stories' do
-    let(:valid_attributes) { { title: 'Learn Elm', body: 'Lorem ipsum' } }
-
+  describe 'POST /stories' do
     context 'when the request is valid' do
-      before { post "/users/#{user_id}/stories", params: { story: valid_attributes } }
+      before { post "/stories", params: { user_id: user_id, story: valid_attributes } }
 
       it 'creates a story' do
         expect(json['title']).to eq('Learn Elm')
@@ -46,20 +45,20 @@ RSpec.describe 'Stories API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post "/users/#{user_id}/stories", params: { story: { title: 'Foobar' } } }
+      before { post "/stories", params: { user_id: user_id, story: { title: 'Foobar' } } }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
-        expect(response.body).to match(/Validation failed: Body can't be blank/)
+        expect(response.body).to match(/Body can't be blank/)
       end
     end
   end
 
-  describe 'GET /top_stories' do
-    before { get '/top_stories', params: { page: 1 } }
+  describe 'GET /stories/top_stories' do
+    before { get '/stories/top_stories', params: { page: 1 } }
 
     it 'returns top stories' do
       expect(json).not_to be_empty
