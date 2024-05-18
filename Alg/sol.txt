@@ -1,0 +1,18 @@
+def find_middle_node(head)
+
+  if head == null
+    return null
+
+  slow = head
+  fast = head
+
+  while fast != nil && fast.next != nil
+    slow = slow.next
+    fast = fast.next.next
+  end
+
+  slow
+end
+
+# Time complexity => O(n)
+# Space complexity => O(1)
