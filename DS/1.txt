@@ -1,0 +1,49 @@
+class Queue
+  def initialize(size)
+    @queue = Array.new(size)
+    @front = -1
+    @rear = -1
+    @size = size
+  end
+
+  def is_empty
+    @front == -1
+  end
+
+  def is_full
+    @rear == @size - 1
+  end
+
+  def enqueue(element)
+    if is_full
+      puts "Queue is full"
+    else
+      if @front == -1
+        @front = 0
+      end
+      @rear += 1
+      @queue[@rear] = element
+    end
+  end
+
+  def dequeue
+    if is_empty
+      puts "Queue is empty"
+    else
+      element = @queue[@front]
+      if @front == @rear
+        @front = -1
+        @rear = -1
+      else
+        @front += 1
+      end
+      element
+    end
+  end
+end
+
+
+
+# Time complexity 
+# Enqueue => O(1)
+# Dequeue => O(1)

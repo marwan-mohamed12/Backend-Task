@@ -1,0 +1,64 @@
+class MaxPriorityQueue
+  def initialize(size)
+    @queue = Array.new(size) { { value: nil, priority: nil } }
+    @front = -1
+    @rear = -1
+    @size = size
+  end
+
+  def is_empty
+    @front == -1
+  end
+
+  def is_full
+    @rear == @size - 1
+  end
+
+  def enqueue(value, priority)
+    if is_full
+      puts "Queue is full"
+    else
+      if @front == -1
+        @front = 0
+      end
+      @rear += 1
+      @queue[@rear] = { value: value, priority: priority }
+      sort_queue
+    end
+  end
+
+  def dequeue
+    if is_empty
+      puts "Queue is empty"
+    else
+      element = @queue[@front]
+      if @front == @rear
+        @front = -1
+        @rear = -1
+      else
+        @front += 1
+      end
+      element
+    end
+  end
+
+  private
+
+  def sort_queue
+    # Simple insertion sort based on priority
+    for i in 1..@rear
+      key = @queue[i]
+      j = i - 1
+      while j >= 0 && @queue[j][:priority] < key[:priority]
+        @queue[j + 1] = @queue[j]
+        j -= 1
+      end
+      @queue[j + 1] = key
+    end
+  end
+end
+
+
+# Time complexity 
+# Enqueue => O(n)
+# Dequeue => O(1)
